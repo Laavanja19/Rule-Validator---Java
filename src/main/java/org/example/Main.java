@@ -1,0 +1,77 @@
+package org.example;
+/*
+ *  Copyright (c) 2025, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+ *
+ *  WSO2 LLC. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.Predicate;
+import com.moandjiezana.toml.Toml;
+
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+
+/**
+ * Main class to represent a target document for rules to be applied.
+ */
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Logger logger = null;
+        try {
+            Toml toml = new Toml().read(new File("Config.toml"));
+            String filePath = toml.getString("apiPath");
+            String content = Files.readString(Paths.get(filePath));
+            Document doc = new Document(content);
+            TraversalProperties.generateParentChildMap(doc.getRootDocument(),null);
+            TraversalProperties.printParentChildRelations();
+            TraversalProperties.printPropertyNames();
+
+            System.out.println(TraversalProperties.getTraversalMap(doc));
+
+            Configuration config = Configuration.builder().options().build();
+            String jsonPathExpression = "$..book[(@.length-1)]";
+            Predicate predicate = new MetaPredicate.PredicateFeatures(jsonPathExpression,doc);
+
+
+            List<Map<String,Object>> result = JsonPath
+                    .using(com.jayway.jsonpath.Configuration.defaultConfiguration())
+                    .parse(content)
+                    .read("$..book.*[?]", List.class, predicate);
+
+
+
+//            System.out.println("Query Results: ");
+//            for(Object result : results) {
+//                System.out.println(result);
+//
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+}
+
+
+
