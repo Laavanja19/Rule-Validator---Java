@@ -1,7 +1,6 @@
 package org.example;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.jayway.jsonpath.JsonPath;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
@@ -13,12 +12,11 @@ import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.w3c.dom.Node;
 
+
 import java.text.Format;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.Iterator;
 
 
 
@@ -36,11 +34,25 @@ public class Document {
         this.documentString = gson.toJson(yamlData);
 
         this.document = JsonPath.parse(this.documentString).json();
+        Object rootDocument = StringWrappers.wrapStrings(this.document);
+        //System.out.println(PreProcessing.assignPaths(jsonPathExpression,rootDocument));
+        //TraversalProperties.getTraversalMap(document);
+
     }
 
     public Object getRootDocument() {
         return this.document;
     }
+
+//    public String wrapString(Object documentString) {
+//        TraversalProperties.StringWrapper stringValue = new TraversalProperties.StringWrapper(Object documentString);
+//        TraversalProperties.NumberWrapper numberValue = new TraversalProperties.NumberWrapper(Object documentString);
+//        TraversalProperties.BooleanWrapper booleanValue = new TraversalProperties.BooleanWrapper(Object documentString);
+//    }
+
+
+
+
 
     public static Object getMetaData(Object currentNode, NodeMetaData key) {
         Object parentNode = TraversalProperties.getParent(currentNode);
@@ -71,6 +83,7 @@ public class Document {
 
     public static String getPropertyName(Object node) {
         Object parent = TraversalProperties.getParent(node);
+
         if (parent == null) {
             return null;
         }
@@ -108,12 +121,10 @@ public class Document {
         };
 
         for (String pattern : unsupportedFeatures) {
-            if (Pattern.compile(pattern).matcher(givenPath).find()) {
+            if(givenPath.contains(pattern)){
                 return true;
             }
         }
         return false;
     }
-
-
 }

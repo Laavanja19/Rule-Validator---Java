@@ -19,7 +19,6 @@ package org.example;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.Predicate;
 import com.moandjiezana.toml.Toml;
 
@@ -37,41 +36,18 @@ import java.util.logging.Logger;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        Logger logger = null;
         try {
             Toml toml = new Toml().read(new File("Config.toml"));
             String filePath = toml.getString("apiPath");
             String content = Files.readString(Paths.get(filePath));
             Document doc = new Document(content);
-            TraversalProperties.generateParentChildMap(doc.getRootDocument(),null);
-            TraversalProperties.printParentChildRelations();
-            TraversalProperties.printPropertyNames();
-
-            System.out.println(TraversalProperties.getTraversalMap(doc));
-
-            Configuration config = Configuration.builder().options().build();
             String jsonPathExpression = "$..book[(@.length-1)]";
-            Predicate predicate = new MetaPredicate.PredicateFeatures(jsonPathExpression,doc);
+            Object rootDocument = doc.getRootDocument();
+            System.out.println(PreProcessing.assignPaths(jsonPathExpression,rootDocument));
 
-
-            List<Map<String,Object>> result = JsonPath
-                    .using(com.jayway.jsonpath.Configuration.defaultConfiguration())
-                    .parse(content)
-                    .read("$..book.*[?]", List.class, predicate);
-
-
-
-//            System.out.println("Query Results: ");
-//            for(Object result : results) {
-//                System.out.println(result);
-//
-//            }
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 }
-
-
 
