@@ -23,29 +23,6 @@ public class TraversalProperties {
         return instance;
     }
 
-//    public static void generateParentChildMap(Object current, Object parent) {
-//        if (parent != null) {
-//            traversalMap.put(current, parent);
-//        }
-//
-//
-//
-//
-//
-//        if (current instanceof Map map) {
-//            for (Map.Entry<?,?> entry : new ArrayList<>(((Map<?, ?>) map).entrySet())) {
-//                Object value = wrapObjects(entry.getValue());
-//                ((Map<Object, Object>) map).put(entry.getKey(), value);
-//                generateParentChildMap(value, current);
-//            }
-//        } else if (current instanceof List<?> list) {
-//            for (int i = 0; i < list.size(); i++) {
-//                Object item = wrapObjects(list.get(i));
-//                ((List<Object>) list).set(i, item);
-//                generateParentChildMap(item, current);
-//            }
-//        }
-//    }
     public static void generateParentChildMap(Object current, Object parent) {
         if (parent != null) {
             traversalMap.put(current, parent);

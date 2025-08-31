@@ -44,16 +44,6 @@ public class Document {
         return this.document;
     }
 
-//    public String wrapString(Object documentString) {
-//        TraversalProperties.StringWrapper stringValue = new TraversalProperties.StringWrapper(Object documentString);
-//        TraversalProperties.NumberWrapper numberValue = new TraversalProperties.NumberWrapper(Object documentString);
-//        TraversalProperties.BooleanWrapper booleanValue = new TraversalProperties.BooleanWrapper(Object documentString);
-//    }
-
-
-
-
-
     public static Object getMetaData(Object currentNode, NodeMetaData key) {
         Object parentNode = TraversalProperties.getParent(currentNode);
         switch(key) {
@@ -77,7 +67,7 @@ public class Document {
                 return parentNode;
 
             default:
-                return null;
+                return currentNode;
         }
     }
 
@@ -114,7 +104,6 @@ public class Document {
                 "@root",
                 "~",
                 "@parentProperty",
-                "@root",
                 "^",
                 "@number",
                 "@match"

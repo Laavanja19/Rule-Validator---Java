@@ -41,7 +41,7 @@ public class Main {
             String filePath = toml.getString("apiPath");
             String content = Files.readString(Paths.get(filePath));
             Document doc = new Document(content);
-            String jsonPathExpression = "$..book[(@.length-1)]";
+            String jsonPathExpression = "$..book.*.*[?(@property !== \"category\")]";
             Object rootDocument = doc.getRootDocument();
             System.out.println(PreProcessing.assignPaths(jsonPathExpression,rootDocument));
 
