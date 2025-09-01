@@ -35,8 +35,7 @@ public class StringWrappers {
                 list.set(i, wrapStrings(list.get(i)));
             }
             return list;
-        }
-        else {
+        } else {
             return node;
         }
     }

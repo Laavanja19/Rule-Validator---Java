@@ -170,7 +170,6 @@ public class MetaPredicate {
             System.out.println("Resulting : " + resulting);
             return resulting;
         }
-
     }
 }
 

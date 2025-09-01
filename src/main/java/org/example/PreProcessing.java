@@ -75,6 +75,7 @@ public class PreProcessing {
         } else {
             throw new Exception("Multiple Advanced Features are Not Supported");
         }
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println(gson.toJson(paths));
         return paths;
