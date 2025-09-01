@@ -3,8 +3,6 @@ package org.example;
 import java.util.*;
 
 import org.example.Document;
-
-
 public class TraversalProperties {
     private static final IdentityHashMap<Object, Object> traversalMap = new IdentityHashMap<>();
     private static final HashMap<Object,Object> parentMap = new HashMap<>();

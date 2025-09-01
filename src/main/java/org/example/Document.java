@@ -1,23 +1,14 @@
 package org.example;
 
-import com.google.gson.*;
 import com.jayway.jsonpath.JsonPath;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jayway.jsonpath.JsonPath;
-import org.snakeyaml.engine.v2.api.Load;
-import org.snakeyaml.engine.v2.api.LoadSettings;
-import org.w3c.dom.Node;
 
 
-import java.text.Format;
 import java.util.*;
-import java.util.regex.Pattern;
-import java.util.Iterator;
-
 
 
 public class Document {
@@ -58,17 +49,23 @@ public class Document {
             case PROPERTY:
                 return getPropertyName(currentNode);
             case PARENT_PROPERTY:
-                if (parentNode != null) {
-                    return getPropertyName(parentNode);
-                } else {
-                    return null;
-                }
+                return getPropertyName(parentNode);
             case PARENT:
                 return parentNode;
 
             default:
-                return currentNode;
+                return null;
         }
+    }
+
+    public static Object getCurrent(Object node,String field) {
+        if (node instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) node;
+            if (map.containsKey(field)) {
+                return map.get(field);
+            }
+        }
+        return null;
     }
 
     public static String getPropertyName(Object node) {
@@ -95,8 +92,10 @@ public class Document {
         return null;
     }
 
+
     public static boolean hasAdvancedFeatures(String givenPath) {
         String[] unsupportedFeatures = {
+                "@",
                 "@.length",
                 "@property",
                 "@path",

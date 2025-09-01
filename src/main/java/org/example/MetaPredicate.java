@@ -60,11 +60,15 @@ public class MetaPredicate {
             }
 
             return boolResult;
+            //return true;
         }
 
 
         public static String processAdvancedFeatures(String jsonPathExpression, Object currentNode) {
             String result = jsonPathExpression;
+            if(jsonPathExpression.contains("@.") && !jsonPathExpression.contains("@.length")) {
+                result = replaceCurrent(result,currentNode);
+            }
             if (jsonPathExpression.contains("@.length")) {
                 result = replaceLength(result, currentNode);
             }
@@ -77,6 +81,25 @@ public class MetaPredicate {
             if (jsonPathExpression.contains("@parent")) {
                 result = replaceParent(result, currentNode);
             }
+            return result;
+
+        }
+
+        public static String replaceCurrent(String jsonPathExpression, Object currentNode) {
+            String result = jsonPathExpression;
+            String operators[] = {"===", "!==", ">", ">=", "<", "<="};
+            int start = result.indexOf("@");
+            int end = 0;
+            for(int i=0;i<operators.length;i++) {
+                if(result.contains(operators[i])){
+                    end = result.indexOf(operators[i]);
+                    break;
+                }
+            }
+            String subString = result.substring(start+2,end);
+            Object getCurrentObject = Document.getCurrent(currentNode,subString);
+            result = result.replace("@."+subString,String.valueOf(getCurrentObject));
+            System.out.println("Current: " + getCurrentObject);
             return result;
 
         }
@@ -95,9 +118,18 @@ public class MetaPredicate {
             String result = jsonPathExpression;
             Object getPropertyObject = Document.getMetaData(currentNode, NodeMetaData.PROPERTY);
             System.out.println(getPropertyObject);
-            if (getPropertyObject instanceof String) {
-                result = result.replace("@property", String.valueOf(getPropertyObject));
+            try {
+                Integer.parseInt(String.valueOf(getPropertyObject));
             }
+            catch(Exception e) {
+                getPropertyObject = "\""+String.valueOf(getPropertyObject)+"\"";
+            }
+//            if (getPropertyObject instanceof String) {
+//                result = result.replace("@property", "\""+String.valueOf(getPropertyObject)+"\"");
+//            } else {
+//                result = result.replace("@property", String.valueOf(getPropertyObject));
+//            }
+            result = result.replace("@property", String.valueOf(getPropertyObject));
             return result;
         }
 

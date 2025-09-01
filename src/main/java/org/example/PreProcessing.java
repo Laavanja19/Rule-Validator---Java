@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Predicate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
