@@ -36,3 +36,18 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# IntelliJ IDEA project files
+.idea/
+
+# Config and data files
+Config.toml
+data.json
+sample.java
+
+# Ignore any Config.toml inside src
+src/main/java/org/example/Config.toml
+
+# Main files
+src/main/java/org/example/CustomEvaluator.java
+src/main/java/org/example/Main.java
